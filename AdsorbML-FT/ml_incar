@@ -1,0 +1,43 @@
+Global Parameters
+
+# 模型路径
+checkpoint_path = /home/zlb/wzy-shell/fairchem_checkpoints/eq2_31M_ec4_allmd.pt  #主要不要有双引号
+
+# 建模参数  
+
+num_sites = 10  # 外加随机启发的10个结构，至少给1。
+opt_cif = True	#默认直接开始计算。"""此时需要注意优化参数的修改"""
+num_n = 5	# 最低的5个。肯能不够，可以直接加。
+supply_traj = False	#不会建模，不会计算
+supply_model  = False	#自动建模。改为True，则是在ads_slab，可以自己提供POSCAR。
+calc_moldes = True	 #计算优化结构
+num_cf = 10  #代表着只优化了11个结构
+
+
+
+#数据库参数
+ns = 3  #1000默认为包含全部traj
+DFT_db  = False   # 不保存slab和DFT的db
+save_csv  = True    # 保存db为表格
+split = [8,2,0]  #训练：验证 ：测试 一般就是8：2
+
+#训练参数
+# Train Parameters
+src = ./01-data/03-data_lmdb      #### 训练数据所在的路径，里面包含train和val
+max_epochs = 30
+batch_size = 3
+eval_batch_size = 3  
+yml = False   # yml 默认没有。单个下如果有，可以给出路径。
+
+
+#优化参数
+Optcif Parameters
+cpu = False
+opt_fmax = 0.02  #模型优化的力
+opt_steps = 500   #最大步数
+min_constraints = 32  #固定最低的n个原子
+tags0 = 32    # n, 最低的n个原子设置为0，（固定层）
+tags1 = 64    # m, 最低的n到m个原子设置为0（表面层）当吸附分子低于表面请自己算。
+
+
+
