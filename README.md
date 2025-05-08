@@ -1,31 +1,32 @@
 # AdsorbML-FT
 
-AdsorbML-FT is a machine learning workflow for adsorption energy prediction and structure optimization. The MK component provides steady-state approximation solutions.
+AdsorbML-FT is an advanced machine learning framework designed for accurate adsorption energy prediction and efficient structure optimization on catalyst surfaces. The integrated MK (Microkinetic) component delivers steady-state approximation solutions for reaction network analysis.
 
 ## Overview
 
-This project provides tools for:
-- Generating adsorption configurations using heuristic and random methods
-- Optimizing structures using machine learning models
-- Training and fine-tuning models for adsorption energy prediction
-- Processing and analyzing adsorption data
+This comprehensive toolkit offers:
+- Automated generation of diverse adsorption configurations through sophisticated heuristic and random methods
+- High-precision structure optimization powered by state-of-the-art machine learning models
+- Flexible training and fine-tuning capabilities for adsorption energy prediction models
+- Robust processing and analysis of complex adsorption data
+- Microkinetic modeling for reaction pathway analysis and product distribution prediction
 
 ## Installation
 
 ### Prerequisites
 
-Before using AdsorbML-FT, you need to install fair-chem:
+Before using AdsorbML-FT, you need to install FairChem:
 
 ```bash
-# Follow the fair-chem installation instructions
-# https://github.com/Open-Catalyst-Project/fair-chem
+# Follow the FairChem installation instructions
+# https://github.com/facebookresearch/fairchem
 ```
 
 ### Setup
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/AdsorbML-FT.git
+git clone https://github.com/angzhaoyu/AdsorbML-FT.git
 cd AdsorbML-FT
 ```
 
@@ -36,10 +37,10 @@ pip install -r requirements.txt
 
 ## Usage
 
-### 1. Activate fair-chem environment
+### 1. Activate FairChem environment
 
 ```bash
-# Activate your fair-chem environment
+# Activate your FairChem environment
 conda activate fair-chem
 ```
 
@@ -267,7 +268,7 @@ Place your trajectory files in the following directories:
 /AdsorbML-FT/AdsorbML-FT/01-data/01-data_traj/slab_traj   # Slab structures
 ```
 
-The adsorption energy calculation differs from fair-chem's approach. We directly use:
+The adsorption energy calculation differs from FairChem's approach. We directly use:
 ```
 Eads = E(ads) - E(slab) - E(mol)
 ```
@@ -359,34 +360,37 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- Fair-chem project for providing the machine learning framework
-- Open Catalyst Project for datasets and models
+- [FairChem](https://github.com/facebookresearch/fairchem) project for providing the machine learning framework
+- [Open Catalyst Project](https://opencatalystproject.org/) for datasets and models
+- Contributors to the AdsorbML-FT project for their valuable input and feedback
 
-# MK Component
+## Part 2: MK Component
 
-The MK (Microkinetic) component provides tools for steady-state approximation solutions to analyze reaction networks and calculate surface coverages and reaction rates.
+The MK (Microkinetic) component provides sophisticated tools for steady-state approximation solutions to analyze complex reaction networks and calculate surface coverages and reaction rates with high precision.
 
-## Overview
+### 2.1 MK Overview
 
-The MK component uses microkinetic modeling to:
-- Calculate steady-state surface coverages of adsorbates
-- Determine reaction rates for different pathways
-- Analyze the kinetics of catalytic reactions
-- Predict product distributions
+The advanced microkinetic modeling capabilities enable researchers to:
+- Calculate accurate steady-state surface coverages of adsorbates under various reaction conditions
+- Determine precise reaction rates for competing reaction pathways
+- Analyze the detailed kinetics of catalytic reactions at the molecular level
+- Predict product distributions for multi-step reaction networks
+- Identify rate-determining steps in catalytic cycles
 
-## Key Functions
+### 2.2 Key Functions
 
-The MK component includes the following key functions:
+The MK component includes the following powerful functions:
 
-1. `get_ra(R, P, k)` - Calculate reaction rate for a given reaction
-2. `get_RP(eq_name, dict)` - Extract reactants and products from a reaction equation
-3. `find_k(df_Eak, eq_1)` - Find rate constants for a given reaction
-4. `get_ads(eq_name)` - Identify adsorbates and small molecules in a reaction
-5. `initial_ads(eqs)` - Initialize adsorbate concentrations
-6. `ad_bound(y, dict_bound)` - Apply boundary conditions
-7. `MK(dict_ads, eqs, df, dict_bound)` - Calculate steady-state coverages and reaction rates
+1. `get_ra(R, P, k)` - Calculate precise reaction rates for elementary steps
+2. `get_RP(eq_name, dict)` - Extract reactants and products from reaction equations with sophisticated parsing
+3. `find_k(df_Eak, eq_1)` - Identify appropriate rate constants for specific reactions from the database
+4. `get_ads(eq_name)` - Intelligently identify adsorbates and gas/liquid phase molecules in reaction networks
+5. `initial_ads(eqs)` - Initialize adsorbate concentrations with appropriate starting values
+6. `ad_bound(y, dict_bound)` - Apply realistic boundary conditions to the reaction system
+7. `MK(dict_ads, eqs, df, dict_bound)` - Calculate steady-state coverages and reaction rates using numerical solvers
+8. `cal_coverge(df_1, dict_bound, ads)` - Comprehensive function to analyze coverage and reaction rates in one step
 
-## Boundary Conditions
+### 2.3 Boundary Conditions
 
 The MK model requires boundary conditions to be specified for the gas-phase and liquid-phase species. These are set in the `dict_bound` dictionary:
 
@@ -402,7 +406,7 @@ dict_bound = {
 }
 ```
 
-## Rate Constants (k values)
+### 2.4 Rate Constants (k values)
 
 The rate constants for each reaction are stored in a table format. Each reaction has forward (k_forward) and reverse (k_reverse) rate constants. These values are used to calculate the reaction rates at steady state.
 
@@ -424,7 +428,7 @@ The rate constants for each reaction are stored in a table format. Each reaction
 
 </details>
 
-## Usage
+### 2.5 Usage
 
 To use the MK component:
 
@@ -459,11 +463,13 @@ mol = ["CO(g)", "CH2O(g)", "CH3OH(l)", "CH4(g)"]
 coverage, rate = cal_coverge(df_1, dict_bound, mol)
 ```
 
-## Execution Results
+## Part 1: AdsorbML-FT Workflow
+
+### 1. Execution Results
 
 This section contains the results of running the AdsorbML-FT workflow.
 
-### Database Creation and Model Training
+#### 1.1 Database Creation and Model Training
 
 After placing trajectory files in the appropriate directories:
 ```
@@ -529,7 +535,7 @@ bs3_max30_eq2_31M_ec4_allmd.txt
 bs3_max30_eq2_31M_ec4_allmd.yml
 ```
 
-### Structure Optimization
+#### 1.2 Structure Optimization
 
 We copied the initial structures to the 03-opt/Cu3M1-CO_cif directory and modified the ml_incar file to use our trained model:
 
@@ -555,7 +561,7 @@ BFGS:    0 19:25:55      -14.877031        1.011775
 ```
 </details>
 
-### Extracting Lowest Energy Structures
+#### 1.3 Extracting Lowest Energy Structures
 
 Finally, we ran the get_lower_cif.py script to extract the structures with the lowest energy. This created a Cu3M1-CO_lower directory with the lowest energy structures and a lowest_energy_files.csv file with the energy information:
 
