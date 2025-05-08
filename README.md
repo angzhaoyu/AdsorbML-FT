@@ -466,20 +466,8 @@ The advanced microkinetic modeling capabilities enable researchers to:
 - Predict product distributions for multi-step reaction networks
 - Identify rate-determining steps in catalytic cycles
 
-### 2.2 Key Functions
 
-The MK component includes the following powerful functions:
-
-1. `get_ra(R, P, k)` - Calculate precise reaction rates for elementary steps
-2. `get_RP(eq_name, dict)` - Extract reactants and products from reaction equations with sophisticated parsing
-3. `find_k(df_Eak, eq_1)` - Identify appropriate rate constants for specific reactions from the database
-4. `get_ads(eq_name)` - Intelligently identify adsorbates and gas/liquid phase molecules in reaction networks
-5. `initial_ads(eqs)` - Initialize adsorbate concentrations with appropriate starting values
-6. `ad_bound(y, dict_bound)` - Apply realistic boundary conditions to the reaction system
-7. `MK(dict_ads, eqs, df, dict_bound)` - Calculate steady-state coverages and reaction rates using numerical solvers
-8. `cal_coverge(df_1, dict_bound, ads)` - Comprehensive function to analyze coverage and reaction rates in one step
-
-### 2.3 Boundary Conditions
+### 2.2 Boundary Conditions
 
 The MK model requires boundary conditions to be specified for the gas-phase and liquid-phase species. These are set in the `dict_bound` dictionary:
 
@@ -495,29 +483,8 @@ dict_bound = {
 }
 ```
 
-### 2.4 Rate Constants (k values)
 
-The rate constants for each reaction are stored in a table format. Each reaction has forward (k_forward) and reverse (k_reverse) rate constants. These values are used to calculate the reaction rates at steady state.
-
-<details>
-<summary>Click to see example k values table</summary>
-
-| Reaction | k_forward | k_reverse | Description |
-|----------|-----------|-----------|-------------|
-| CO+*-*CO | 1.0e+8 | 1.0e+3 | CO adsorption |
-| *CO+H-*CHO | 1.0e+3 | 1.0e+2 | CO hydrogenation to CHO |
-| *CO+H-*COH | 1.0e+2 | 1.0e+3 | CO hydrogenation to COH |
-| *CHO+H-*CH2O | 1.0e+3 | 1.0e+2 | CHO hydrogenation to CH2O |
-| *COH+H-*CHOH | 1.0e+3 | 1.0e+2 | COH hydrogenation to CHOH |
-| *CH2O+H-*CH3O | 1.0e+3 | 1.0e+2 | CH2O hydrogenation to CH3O |
-| *CHOH+H-*CH2OH | 1.0e+3 | 1.0e+2 | CHOH hydrogenation to CH2OH |
-| *CH3O+H-*CH3OH | 1.0e+3 | 1.0e+2 | CH3O hydrogenation to CH3OH |
-| *CH2OH+H-*CH3OH | 1.0e+3 | 1.0e+2 | CH2OH hydrogenation to CH3OH |
-| *CH3OH-CH3OH+* | 1.0e+3 | 1.0e+8 | Methanol desorption |
-
-</details>
-
-### 2.5 Usage
+### 2.3 Usage
 
 To use the MK component:
 
@@ -555,7 +522,7 @@ coverage, rate = cal_coverge(df_1, dict_bound, mol)
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+
 
 ## Acknowledgments
 
