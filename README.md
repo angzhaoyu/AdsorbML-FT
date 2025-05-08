@@ -273,23 +273,74 @@ The adsorption energy calculation differs from FairChem's approach. We directly 
 Eads = E(ads) - E(slab) - E(mol)
 ```
 
-### 9. Create database and LMDB files
+#### 9 Database Creation and Model Training
 
-```bash
-python ./script/ml_lmdb.py
+After placing trajectory files in the appropriate directories:
+```
+/AdsorbML-FT/AdsorbML-FT/01-data/01-data_traj/ads_traj    # Structures with adsorbates
+/AdsorbML-FT/AdsorbML-FT/01-data/01-data_traj/slab_traj   # Slab structures
 ```
 
-This will create the database files based on the parameters in ml_incar.
+We ran the ml_lmdb.py script to create the database:
 
-### 10. Train or fine-tune the model
+<details>
+<summary>Click to see ml_lmdb.py output</summary>
 
-```bash
-python ./script/ml_train.py
+```
+If you see progress bars, it means the script ran successfully!
+Next step: Run "ml_train.py"
+```
+</details>
+
+Then we ran ml_train.py to train the model:
+
+<details>
+<summary>Click to see ml_train.py output (partial)</summary>
+
+```
+INFO:root:local rank base: 0
+INFO:root:amp: true
+cmd:
+  checkpoint_dir: /home/zlb/work/wzy/AdsorbML-FT/AdsorbML-FT/checkpoints/2025-05-08-19-13-20
+  commit: core:None,experimental:NA
+  identifier: ''
+  logs_dir: /home/zlb/work/wzy/AdsorbML-FT/AdsorbML-FT/logs/wandb/2025-05-08-19-13-20
+  print_every: 100
+  results_dir: /home/zlb/work/wzy/AdsorbML-FT/AdsorbML-FT/results/2025-05-08-19-13-20
+  seed: null
+  timestamp_id: 2025-05-08-19-13-20
+  version: 1.8.1
+dataset:
+  format: trajectory_lmdb_v2
+  grad_target_mean: 0.0
+  grad_target_std: 2.887317180633545
+  key_mapping:
+    force: forces
+    y: energy
+  normalize_labels: true
+  target_mean: -0.7554450631141663
+  target_std: 2.887317180633545
+  transforms:
+    normalizer:
+      energy:
+        mean: -0.7554450631141663
+        stdev: 2.887317180633545
+      forces:
+        mean: 0.0
+        stdev: 2.887317180633545
+...
+```
+</details>
+
+The trained model was saved in the 02-FT/ads_ns3 directory:
+```
+bs3_max30_eq2_31M_ec4_allmd.pt
+bs3_max30_eq2_31M_ec4_allmd.txt
+bs3_max30_eq2_31M_ec4_allmd.yml
 ```
 
-After training, the model will be saved in the 02-FT directory.
 
-### 11. Optimize structures with the trained model
+### 10. Optimize structures with the trained model
 
 1. Copy the initial structures from the ads_slab directory to a new directory in 03-opt:
 
@@ -344,7 +395,7 @@ BFGS:    0 19:25:55      -14.877031        1.011775
 ```
 </details>
 
-### 12. Extract the lowest energy structures
+### 11. Extract the lowest energy structures
 
 After optimization, run the get_lower_cif.py script to extract the structures with the lowest energy:
 
@@ -401,16 +452,6 @@ The `ml_incar` file contains important parameters for the workflow:
 - `save_csv`: Whether to save CSV files
 - `DFT_db`: Whether to save DFT database
 - `split`: Train/val/test split ratio
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- [FairChem](https://github.com/facebookresearch/fairchem) project for providing the machine learning framework
-- [Open Catalyst Project](https://opencatalystproject.org/) for datasets and models
-- Contributors to the AdsorbML-FT project for their valuable input and feedback
 
 ## Part 2: MK Component
 
@@ -511,3 +552,15 @@ mol = ["CO(g)", "CH2O(g)", "CH3OH(l)", "CH4(g)"]
 coverage, rate = cal_coverge(df_1, dict_bound, mol)
 ```
 
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [FairChem](https://github.com/facebookresearch/fairchem) project for providing the machine learning framework
+- [Open Catalyst Project](https://opencatalystproject.org/) for datasets and models
+- Contributors to the AdsorbML-FT project for their valuable input and feedback
+
+- 
