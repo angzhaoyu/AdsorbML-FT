@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
+"""
+Initialize the AdsorbML-FT project structure.
+This script creates the necessary directories and copies the E_mol file if available.
+"""
 
 import os
 from pathlib import Path
 import shutil
 
 
+# Create directory structure
 os.makedirs(f"00-modeling/00-slab_mol/mol_cif", exist_ok=True)
 os.makedirs(f"00-modeling/01-ads_slab", exist_ok=True)
 os.makedirs(f"00-modeling/02-traj", exist_ok=True)
@@ -16,47 +21,49 @@ os.makedirs(f"01-data/03-data_lmdb", exist_ok=True)
 os.makedirs(f"02-FT", exist_ok=True)
 os.makedirs(f"03-opt", exist_ok=True)
 
-src_file = "/home/zlb/wzy-shell/fairchem_checkpoints/E_mol"    # 要复制的源文件
-dst_file = os.path.join("01-data/01-data_traj/", "E_mol")  # 目标路径（当前目录下的a.txt）
+# Source file path for E_mol (molecular energies)
+src_file = "/home/zlb/wzy-shell/fairchem_checkpoints/E_mol"    # Source file to copy
+dst_file = os.path.join("01-data/01-data_traj/", "E_mol")      # Destination path
 try:
-    # 检查目标文件是否已存在
+    # Check if destination file already exists
     if os.path.exists(dst_file):
         pass
     else:
-        # 检查源文件是否存在
+        # Check if source file exists
         if not os.path.isfile(src_file):
-            raise FileNotFoundError(f"源文件 {src_file} 不存在")
-        # 执行文件复制
-        shutil.copy2(src_file, dst_file)  # 使用copy2保留元数据        
+            raise FileNotFoundError(f"Source file {src_file} does not exist")
+        # Copy file with metadata
+        shutil.copy2(src_file, dst_file)  # Use copy2 to preserve metadata
 except Exception as e:
-    print(f"操作失败：{str(e)}")
+    print(f"Operation failed: {str(e)}")
 
-txt_sm =  """文件夹结构说明：
+# Directory structure explanation
+txt_sm = """Directory Structure:
 ##########################################################
 
 ├── 00-modeling
-│   ├── 00-slab_mol/mol_cif #小分子
-│   └── 00-slab_mol/slab_cif #板
+│   ├── 00-slab_mol/mol_cif # Molecules
+│   └── 00-slab_mol/slab_cif # Slabs
 │
-├── 01-data_traj/        # 存放轨迹数据
-│   ├── *_traj/          # 存放吸附结构轨迹文件
-│   ├── slab_traj/       # 存放催化剂表面轨迹文件
-│   └── E_mol            # 放入吸附小分子
+├── 01-data_traj/        # Trajectory data
+│   ├── *_traj/          # Adsorption structure trajectory files
+│   ├── slab_traj/       # Catalyst surface trajectory files
+│   └── E_mol            # Adsorption molecule energies
 │
-├── 02-FT/                   # 储存微调结果
-└── 03-opt/                  # 优化结构
+├── 02-FT/               # Fine-tuning results
+└── 03-opt/              # Optimized structures
 
-使用说明：
-0. 在01-data_traj中：
-   - 在mol_cif中放入吸附小分子
-   - 在slab_cif中放入催化剂
+Usage Instructions:
+0. In 00-modeling/00-slab_mol:
+   - Place adsorption molecules in mol_cif
+   - Place catalyst slabs in slab_cif
 
-1. 在01-data_traj中：
-   - 在"*_traj"文件夹中放入"吸附结构轨迹"文件
-   - 在"slab_traj"文件夹中放入"催化剂表面"轨迹文件
-   - 在"E_mol"中放入小分子能量
+1. In 01-data/01-data_traj:
+   - Place adsorption structure trajectory files in "*_traj" folder
+   - Place catalyst surface trajectory files in "slab_traj" folder
+   - Place molecule energies in "E_mol" file
 
-2. 下一步得到数据库：运行"ml_incar.sh" 和 "ml_lmdb.py"。
+2. Next step - Create database: Run "ml_incar.py" and "ml_lmdb.py"
 
 ##########################################################
 """

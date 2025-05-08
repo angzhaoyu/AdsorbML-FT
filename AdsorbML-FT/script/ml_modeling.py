@@ -53,7 +53,7 @@ def find_files_with_extension(directory, extension):
 def get_filename_from_path(file_path):
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     string_without_dot = re.sub(r'\.+$', '', file_name)
-    return string_without_dot 
+    return string_without_dot
 
 def initial_constraints(atoms, n):
     atom_positions = atoms.get_positions()
@@ -63,7 +63,7 @@ def initial_constraints(atoms, n):
     fix_constraint = FixAtoms(indices=min_32_indices)
     atoms.set_constraint(fix_constraint)
     return atoms
-    
+
 def read_cif(path):
     with open(path, 'r') as file:
         if "_cell_" in file.read():
@@ -82,7 +82,7 @@ def plt_cif(slab):
 def deduplicate(configs_for_deduplication: list,
                 adsorbate_binding_index: int,
                 cosine_similarity = 1e-3,
-               ):  
+               ):
     energies_for_deduplication = np.array([atoms.get_potential_energy() for atoms in configs_for_deduplication])
     soap = SOAP(
         species=np.unique(configs_for_deduplication[0].get_chemical_symbols()),
@@ -104,7 +104,7 @@ def deduplicate(configs_for_deduplication: list,
     pass_idxs = []
     for idx, row in enumerate(bool_matrix):
         if idx in pass_idxs:
-            continue    
+            continue
         elif sum(row) == 1:
             idxs_to_keep.append(idx)
         else:
@@ -130,7 +130,7 @@ def parse_config(file_path, required_vars):
             key = key.strip()
             if key in required_vars:
                 value = value.split('#')[0].strip()
-                config[key] = value 
+                config[key] = value
     return config
 
 def set_tags_from_constraints(atoms, tags0, tags1):
@@ -177,14 +177,14 @@ def get_output(num_n):
         results.append({"file_id": traj_name,"slab_id": "_".join(traj_name.split("_")[:-2]),"ads_id": traj_name.split("_")[-2], "relaxed_atoms": traj[-1],
                         "relaxed_energy_ml": rx_energy, "anomolous": anom})
         df = pd.DataFrame(results)
-        
+
         df = df[~df.anomolous].copy().reset_index()
         df = df.sort_values(by=["slab_id" ,"ads_id","relaxed_energy_ml"])
-        
+
     for slab_path in slab_paths:
         slab_name = get_filename_from_path(slab_path)
         for mole_path in mole_paths:
-            mol_name = get_filename_from_path(mole_path) 
+            mol_name = get_filename_from_path(mole_path)
             adsorbate = get_absorbate("*OH")
             mole = read(mole_path)
             mole.cell = [0,0,0]
@@ -205,8 +205,8 @@ if __name__ == "__main__":
     try:
         ml_incar = parse_config('ml_incar', required_parameters)
     except FileNotFoundError:
-        print('请先运行 "ml_incar.sh" 生成配置文件！')
-        sys.exit(1)    
+        print('Please run "ml_incar.py" first to generate the configuration file!')
+        sys.exit(1)
     try:
         checkpoint_path = str(ml_incar['checkpoint_path'])
         num_sites = int(ml_incar['num_sites'])
@@ -222,7 +222,7 @@ if __name__ == "__main__":
         tags1 = int(ml_incar.get('tags1'))
 
     except (ValueError, TypeError) as e:
-      raise ValueError(f"训练参数缺失！")
+      raise ValueError(f"Training parameters missing!")
     os.makedirs(f"00-modeling/01-ads_slab", exist_ok=True)
     os.makedirs(f"00-modeling/02-traj", exist_ok=True)
     os.makedirs(f"00-modeling/03-poscar", exist_ok=True)
@@ -257,7 +257,7 @@ if __name__ == "__main__":
                         write(f"./00-modeling/01-ads_slab/{slab_name+"_"+mol_name+"_"+str(j)}.cif", i ,format="vasp")
                         if j > num_cf:
                             break
-    
+
         if supply_model == "True" :
             ads_paths = find_files_with_extension("./00-modeling/01-ads_slab/",extension="cif")
             filename_adslabs = {}
@@ -277,5 +277,5 @@ if __name__ == "__main__":
                 adslab = initial_constraints(adslab, min_constraints)
                 adslab = set_tags_from_constraints(adslab, tags0,tags1)
                 opt = BFGS(adslab, trajectory=f"./00-modeling/02-traj/{filename}.traj")
-                opt.run(fmax=opt_fmax, steps=opt_steps)            
+                opt.run(fmax=opt_fmax, steps=opt_steps)
         get_output(num_n)

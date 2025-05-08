@@ -34,7 +34,7 @@ def find_files_with_extension(directory, extension):
 def get_filename_from_path(file_path):
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     string_without_dot = re.sub(r'\.+$', '', file_name)
-    return string_without_dot 
+    return string_without_dot
 
 def wirte_traj_to_db(file_path, db_path, ns):
     if os.path.exists(db_path):
@@ -83,28 +83,28 @@ def get_ads_db(db_DFT_path, db_slab_path, E_ads_db_path, E_mol):
             energy_dft = DFT_atoms.get_potential_energy()
             energy_slab = None
             for slab_name_,slab_energy_  in slab_names_energys.items():
-                if  slab_name_  in DFT_names:                  
-                    energy_slab = slab_energy_ 
+                if  slab_name_  in DFT_names:
+                    energy_slab = slab_energy_
             if energy_slab is None:
-                raise Exception("请给出去添加slab")
+                raise Exception("Please provide slab information")
 
             energy_mol = None
             for mol_name_, mol_energy_ in E_mol.items():
-                if  mol_name_  in DFT_names :                  
+                if  mol_name_  in DFT_names :
                     energy_mol = mol_energy_
             if energy_mol is None:
-                raise Exception("请给出去添加E_mol")
+                raise Exception("Please provide E_mol information")
 
             energy_ads = energy_dft - energy_slab - energy_mol
-            energy_mol = None   
-            energy_slab = None 
+            energy_mol = None
+            energy_slab = None
             energy_dft = None
             if energy_ads > 10:
                 continue
             calc = SinglePointCalculator(atoms=DFT_atoms, energy=energy_ads, forces =DFT_atoms.get_forces())
             DFT_atoms.calc = calc
             E_ads_db.write(DFT_atoms, name = DFT_names)
-            
+
     return E_ads_db_path
 
 def parse_config(file_path, required_vars):
@@ -118,7 +118,7 @@ def parse_config(file_path, required_vars):
             key = key.strip()
             if key in required_vars:
                 value = value.split('#')[0].strip()
-                config[key] = value 
+                config[key] = value
     return config
 
 def split_array(array, split):
@@ -153,7 +153,7 @@ def write_lmdb(lmdb_path, data_a2g, sid_set, fid_set):
 
     for id, data in tqdm(enumerate(data_a2g), total=len(data_a2g)):
         data.sid = torch.LongTensor([sid_set[id]])
-        data.fid = torch.LongTensor([fid_set[id]])  
+        data.fid = torch.LongTensor([fid_set[id]])
         # Filter data if necessary
         # OCP filters adsorption energies > |10| eV and forces > |50| eV/A
         # no neighbor edge case check
@@ -172,7 +172,7 @@ def write_lmdb(lmdb_path, data_a2g, sid_set, fid_set):
     lmdb1.close()
 
     return lmdb_path
-    
+
 def get_sid_fid_from_db(db):
     names = []
     for row in db.select():
@@ -255,19 +255,19 @@ def string_to_list(s):
     try:
         return ast.literal_eval(s)
     except (ValueError, SyntaxError):
-        raise ValueError(f"无法解析字符串: {s}")
+        raise ValueError(f"Unable to parse string: {s}")
 
 def parse_value(s):
-    return float(eval(s.strip())) 
+    return float(eval(s.strip()))
 
 def parse_energy_file_to_dict(file_path=None, text_content=None):
     if file_path is None and text_content is None:
-        raise ValueError("必须提供 file_path 或 text_content")
-    
+        raise ValueError("Must provide either file_path or text_content")
+
     if file_path:
         with open(file_path, 'r') as f:
             text_content = f.read()
-    
+
     energy_dict = {}
     for line in text_content.split('\n'):
         if not line.strip():
@@ -284,17 +284,17 @@ def remove_f(folder_path):
         if os.path.isdir(folder_path):
             try:
                 shutil.rmtree(folder_path)
-                print(f"文件夹 '{folder_path}' 已删除")
+                print(f"Folder '{folder_path}' has been deleted")
             except Exception as e:
-                print(f"删除失败: {e}")
+                print(f"Deletion failed: {e}")
     else:
-        print(f"文件夹 '{folder_path}' 不存在")
+        print(f"Folder '{folder_path}' does not exist")
 def remove_path(target_path):
-    """删除文件或文件夹"""
+    """Delete a file or folder"""
     if os.path.isfile(target_path):
-        os.remove(target_path)  # 删除文件
+        os.remove(target_path)  # Delete file
     elif os.path.isdir(target_path):
-        shutil.rmtree(target_path)  # 删除文件夹
+        shutil.rmtree(target_path)  # Delete folder
 
 
 if __name__ == "__main__":
@@ -307,22 +307,22 @@ if __name__ == "__main__":
     try:
       ml_incar = parse_config('ml_incar', required_parameters)
     except FileNotFoundError:
-      print('请先运行 "ml_incar.sh" 生成配置文件！')
+      print('Please run "ml_incar.py" first to generate the configuration file!')
       sys.exit(1)
     try:
-        ns = int(ml_incar['ns'])  
+        ns = int(ml_incar['ns'])
         save_csv = ml_incar['save_csv']
         DFT_db = ml_incar['DFT_db']
         split = ml_incar['split']
         split = string_to_list(split)
 
     except (ValueError, TypeError) as e:
-      raise ValueError(f"训练参数缺失！")
-    
+      raise ValueError(f"Training parameters missing!")
+
     folders = [entry.name for entry in os.scandir('./01-data/01-data_traj/') if entry.is_dir()]
-    
+
     if len(find_files_with_extension('./01-data/01-data_traj/slab_traj', ".traj")) == 0 :
-        raise Exception("请给出slab, 或者吸附traj")
+        raise Exception("Please provide slab or adsorption trajectory files")
 
     slab_file_paths = []
     ads_file_paths = []
@@ -332,7 +332,7 @@ if __name__ == "__main__":
         else:
             ads_file_paths.append(traj_file_paths)
     if len(slab_file_paths) < 1:
-        raise Exception("请给出slab")
+        raise Exception("Please provide slab information")
 
     for ads_file_path in ads_file_paths:
         slab_db_path ="./01-data/02-data_db/" + slab_file_paths[0]+f"_ns{ns}.db"
@@ -351,7 +351,7 @@ if __name__ == "__main__":
         print_db(E_ads_db_path,save= save_csv)
         write_lmdb_finally(E_ads_db_path,split)
 
-        txt_sm =  """如果你看到有进度条，说明你成功运行！!  \n下一步运行           "ml_train.py" """
+        txt_sm = """If you see progress bars, it means the script ran successfully!  \nNext step: Run "ml_train.py" """
         print(txt_sm)
 
 

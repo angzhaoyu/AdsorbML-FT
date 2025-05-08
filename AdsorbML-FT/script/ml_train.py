@@ -29,7 +29,7 @@ def find_files_with_extension(directory, extension):
 def get_filename_from_path(file_path):
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     string_without_dot = re.sub(r'\.+$', '', file_name)
-    return string_without_dot 
+    return string_without_dot
 
 def find_folders_with_extension(foler_path,extension):
     cif_folders = []
@@ -51,7 +51,7 @@ def parse_config(file_path, required_vars):
             key = key.strip()
             if key in required_vars:
                 value = value.split('#')[0].strip()
-                config[key] = value 
+                config[key] = value
     return config
 
 if __name__ == "__main__":
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     try:
       ml_incar = parse_config('ml_incar', required_parameters)
     except FileNotFoundError:
-      print('请先运行 "ml_incar.sh" 生成配置文件！')
+      print('Please run "ml_incar.py" first to generate the configuration file!')
       sys.exit(1)
 
     try:
@@ -70,16 +70,16 @@ if __name__ == "__main__":
       batch_size = int(ml_incar['batch_size'])
       eval_batch_size = int(ml_incar['eval_batch_size'])
     except (ValueError, TypeError) as e:
-      raise ValueError(f"训练参数缺失！")
-    
+      raise ValueError(f"Training parameters missing!")
+
     if len(find_files_with_extension("./",".lmdb")) == 0:
-      raise ValueError(f"请给出lmdb数据库！")
+      raise ValueError(f"Please provide LMDB database!")
 
     if len([entry.name for entry in os.scandir(src) if entry.is_dir() and entry.name == "train"]) > 0:
       pass
     else:
         src = f"{src}/{[entry.name for entry in os.scandir(src) if entry.is_dir()][0]}"
-        
+
     # Get command line arguments
     element_c = "bs"+str(batch_size)+"_"+ "max"+str(max_epochs) +"_"
     train_src = src + "/train"
@@ -127,19 +127,19 @@ if __name__ == "__main__":
                                 # val data
                                 'dataset.val.src': "%s" % val_src,
                                 })
-    
+
 
     t0 = time.time()
     command = f"python {fairchem_main()} --mode train --config-yml {yml} --checkpoint {checkpoint_path}  --run-dir fine-tuning  --identifier {id_name} --amp > {train_txt} 2>&1 "
     subprocess.run(command, shell=True, check=True)
-    print(f'Elapsed time = {time.time() - t0:1.1f} seconds')      
+    print(f'Elapsed time = {time.time() - t0:1.1f} seconds')
     with open('%s' % train_txt, 'r', encoding='utf-8') as file:
         lines = file.readlines()
     for line in lines:
         if "checkpoint_dir:" in line:
             parts = line.split(':')
             cpdir = parts[-1].strip()
-            break 
+            break
     checkpoint_cpdir = cpdir + "/checkpoint.pt"
     modified_model_path = f"./02-FT/{FT_folder_name}/{element_c}{id_name}.pt"
     model = torch.load(checkpoint_cpdir)
@@ -153,8 +153,8 @@ if __name__ == "__main__":
         if os.path.isdir(folder_path):
             try:
                 shutil.rmtree(folder_path)
-                #print(f"文件夹 '{folder_path}' 已删除")
+                #print(f"Folder '{folder_path}' has been deleted")
             except Exception as e:
-                print(f"删除失败: {e}")
+                print(f"Deletion failed: {e}")
     else:
-        print(f"文件夹 '{folder_path}' 不存在")
+        print(f"Folder '{folder_path}' does not exist")

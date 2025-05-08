@@ -36,7 +36,7 @@ def read_cif(path):
 def get_filename_from_path(file_path):
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     string_without_dot = re.sub(r'\.+$', '', file_name)
-    return string_without_dot 
+    return string_without_dot
 
 def find_folders_with_extension(foler_path,extension):
     cif_folders = []
@@ -91,7 +91,7 @@ def parse_config(file_path, required_vars):
             key = key.strip()
             if key in required_vars:
                 value = value.split('#')[0].strip()
-                config[key] = value 
+                config[key] = value
     return config
 
 if __name__ == "__main__":
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     try:
       ml_incar = parse_config('ml_incar', required_parameters)
     except FileNotFoundError:
-      print('请先运行 "ml_incar.sh" 生成配置文件！')
+      print('Please run "ml_incar.py" first to generate the configuration file!')
       sys.exit(1)
 
 

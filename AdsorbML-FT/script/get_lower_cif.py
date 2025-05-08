@@ -5,7 +5,7 @@ import shutil  # Import the shutil module for file operations
 from ase.io import read
 
 def extract_last_step_energy(traj_file):
-    """读取 traj 文件并提取最后一步的能量"""
+    """Read trajectory file and extract energy from the last step"""
     try:
         # Use index=-1 for efficiency if only the last frame is needed
         last_step = read(traj_file, index=-1)
@@ -16,14 +16,14 @@ def extract_last_step_energy(traj_file):
         return None
 
 def find_poscar_dir(current_dir='.'):
-    """在当前目录查找以 '_poscar' 结尾的文件夹"""
+    """Find directory ending with '_poscar' in the current directory"""
     for item in os.listdir(current_dir):
         if os.path.isdir(os.path.join(current_dir, item)) and item.endswith('_poscar'):
             return item
     return None
 
 def find_traj_dir(current_dir='.'):
-    """在当前目录查找以 '_poscar' 结尾的文件夹"""
+    """Find directory ending with '_traj' in the current directory"""
     for item in os.listdir(current_dir):
         if os.path.isdir(os.path.join(current_dir, item)) and item.endswith('_traj'):
             return item
@@ -65,17 +65,17 @@ def main():
         return
 
     source_dir_path = os.path.join(current_directory, poscar_dir_name)
-    # 创建新的文件夹名字
+    # Create new folder name
     lower_dir_name = poscar_dir_name.replace('_poscar', '_lower')
     #print(lower_dir_name)
     os.makedirs(lower_dir_name, exist_ok=True)
 
-    # --- 5. 复制文件 ---
+    # --- 5. Copy files ---
     copied_count = 0
     skipped_count = 0
     for index, row in df_min_energy.iterrows():
         min_energy_traj_file = row['File']
-        # 将文件名结尾的 .traj 替换为 .cif
+        # Replace .traj extension with .cif
         base_filename = os.path.splitext(min_energy_traj_file)[0]
         cif_filename = base_filename + '.cif' # Corrected logic to handle potential dots in base name
 
@@ -83,7 +83,7 @@ def main():
 
         dest_file_path = f"{lower_dir_name}/{cif_filename}"
 
-        # 检查源文件是否存在
+        # Check if source file exists
         if os.path.exists(source_file_path):
             try:
                 shutil.copy2(source_file_path, dest_file_path) # copy2 preserves metadata
