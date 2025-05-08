@@ -303,6 +303,10 @@ cp AdsorbML-FT/AdsorbML-FT/00-modeling/01-ads_slab/* AdsorbML-FT/AdsorbML-FT/03-
 
 > **Note:** The directory name can be anything but must end with "_cif".
 
+
+
+
+
 2. Copy the ml_incar file to the 03-opt directory:
 
 ```bash
@@ -324,6 +328,22 @@ cd AdsorbML-FT/AdsorbML-FT/03-opt/
 python ../script/opt_cif.py
 ```
 
+<details>
+<summary>Click to see opt_cif.py output (partial)</summary>
+
+```
+      Step     Time          Energy          fmax
+BFGS:    0 19:25:54      -14.332844        2.105474
+BFGS:    1 19:25:54      -14.426354        2.584027
+BFGS:    2 19:25:54      -14.414130        1.060086
+...
+BFGS:   37 19:25:55      -14.838418        0.016325
+      Step     Time          Energy          fmax
+BFGS:    0 19:25:55      -14.877031        1.011775
+...
+```
+</details>
+
 ### 12. Extract the lowest energy structures
 
 After optimization, run the get_lower_cif.py script to extract the structures with the lowest energy:
@@ -333,6 +353,34 @@ python ../script/get_lower_cif.py
 ```
 
 This will create a new directory with "_lower" suffix containing the lowest energy structures.
+
+<details>
+<summary>Click to see lowest_energy_files.csv</summary>
+
+```
+File,Energy (eV),Base Name
+Cu3Ag1_111_CO_19.traj,-15.13988208770752,Cu3Ag1_111_CO
+Cu3Al1_111_CO_21.traj,-15.234298706054688,Cu3Al1_111_CO
+Cu3As1_111_CO_14.traj,-15.258240699768066,Cu3As1_111_CO
+Cu3Au1_111_CO_7.traj,-15.058496475219727,Cu3Au1_111_CO
+Cu3Cd1_111_CO_7.traj,-15.478275299072266,Cu3Cd1_111_CO
+Cu3Co1_111_CO_4.traj,-17.048173904418945,Cu3Co1_111_CO
+Cu3Cu1_111_CO_1.traj,-15.47188949584961,Cu3Cu1_111_CO
+Cu3Ga1_111_CO_15.traj,-15.139805793762207,Cu3Ga1_111_CO
+Cu3Ge1_111_CO_2.traj,-15.089091300964355,Cu3Ge1_111_CO
+Cu3In1_111_CO_15.traj,-15.029780387878418,Cu3In1_111_CO
+Cu3Ni1_111_CO_18.traj,-16.398197174072266,Cu3Ni1_111_CO
+Cu3Pd1_111_CO_15.traj,-15.852254867553711,Cu3Pd1_111_CO
+Cu3Pt1_111_CO_1.traj,-16.313467025756836,Cu3Pt1_111_CO
+Cu3Rh1_111_CO_5.traj,-16.767507553100586,Cu3Rh1_111_CO
+Cu3Sb1_111_CO_4.traj,-14.992384910583496,Cu3Sb1_111_CO
+Cu3Sn1_111_CO_17.traj,-14.932073593139648,Cu3Sn1_111_CO
+Cu3Zn1_111_CO_2.traj,-15.519940376281738,Cu3Zn1_111_CO
+```
+</details>
+
+The Cu3M1-CO_lower directory contains the optimized CIF files for each of the lowest energy structures.
+
 
 ## Configuration
 
@@ -463,131 +511,3 @@ mol = ["CO(g)", "CH2O(g)", "CH3OH(l)", "CH4(g)"]
 coverage, rate = cal_coverge(df_1, dict_bound, mol)
 ```
 
-## Part 1: AdsorbML-FT Workflow
-
-### 1. Execution Results
-
-This section contains the results of running the AdsorbML-FT workflow.
-
-#### 1.1 Database Creation and Model Training
-
-After placing trajectory files in the appropriate directories:
-```
-/AdsorbML-FT/AdsorbML-FT/01-data/01-data_traj/ads_traj    # Structures with adsorbates
-/AdsorbML-FT/AdsorbML-FT/01-data/01-data_traj/slab_traj   # Slab structures
-```
-
-We ran the ml_lmdb.py script to create the database:
-
-<details>
-<summary>Click to see ml_lmdb.py output</summary>
-
-```
-If you see progress bars, it means the script ran successfully!
-Next step: Run "ml_train.py"
-```
-</details>
-
-Then we ran ml_train.py to train the model:
-
-<details>
-<summary>Click to see ml_train.py output (partial)</summary>
-
-```
-INFO:root:local rank base: 0
-INFO:root:amp: true
-cmd:
-  checkpoint_dir: /home/zlb/work/wzy/AdsorbML-FT/AdsorbML-FT/checkpoints/2025-05-08-19-13-20
-  commit: core:None,experimental:NA
-  identifier: ''
-  logs_dir: /home/zlb/work/wzy/AdsorbML-FT/AdsorbML-FT/logs/wandb/2025-05-08-19-13-20
-  print_every: 100
-  results_dir: /home/zlb/work/wzy/AdsorbML-FT/AdsorbML-FT/results/2025-05-08-19-13-20
-  seed: null
-  timestamp_id: 2025-05-08-19-13-20
-  version: 1.8.1
-dataset:
-  format: trajectory_lmdb_v2
-  grad_target_mean: 0.0
-  grad_target_std: 2.887317180633545
-  key_mapping:
-    force: forces
-    y: energy
-  normalize_labels: true
-  target_mean: -0.7554450631141663
-  target_std: 2.887317180633545
-  transforms:
-    normalizer:
-      energy:
-        mean: -0.7554450631141663
-        stdev: 2.887317180633545
-      forces:
-        mean: 0.0
-        stdev: 2.887317180633545
-...
-```
-</details>
-
-The trained model was saved in the 02-FT/ads_ns3 directory:
-```
-bs3_max30_eq2_31M_ec4_allmd.pt
-bs3_max30_eq2_31M_ec4_allmd.txt
-bs3_max30_eq2_31M_ec4_allmd.yml
-```
-
-#### 1.2 Structure Optimization
-
-We copied the initial structures to the 03-opt/Cu3M1-CO_cif directory and modified the ml_incar file to use our trained model:
-
-```
-checkpoint_path = /home/zlb/work/wzy/AdsorbML-FT/AdsorbML-FT/02-FT/ads_ns3/bs3_max30_eq2_31M_ec4_allmd.pt
-```
-
-Then we ran the opt_cif.py script to optimize the structures:
-
-<details>
-<summary>Click to see opt_cif.py output (partial)</summary>
-
-```
-      Step     Time          Energy          fmax
-BFGS:    0 19:25:54      -14.332844        2.105474
-BFGS:    1 19:25:54      -14.426354        2.584027
-BFGS:    2 19:25:54      -14.414130        1.060086
-...
-BFGS:   37 19:25:55      -14.838418        0.016325
-      Step     Time          Energy          fmax
-BFGS:    0 19:25:55      -14.877031        1.011775
-...
-```
-</details>
-
-#### 1.3 Extracting Lowest Energy Structures
-
-Finally, we ran the get_lower_cif.py script to extract the structures with the lowest energy. This created a Cu3M1-CO_lower directory with the lowest energy structures and a lowest_energy_files.csv file with the energy information:
-
-<details>
-<summary>Click to see lowest_energy_files.csv</summary>
-
-```
-File,Energy (eV),Base Name
-Cu3Ag1_111_CO_19.traj,-15.13988208770752,Cu3Ag1_111_CO
-Cu3Al1_111_CO_21.traj,-15.234298706054688,Cu3Al1_111_CO
-Cu3As1_111_CO_14.traj,-15.258240699768066,Cu3As1_111_CO
-Cu3Au1_111_CO_7.traj,-15.058496475219727,Cu3Au1_111_CO
-Cu3Cd1_111_CO_7.traj,-15.478275299072266,Cu3Cd1_111_CO
-Cu3Co1_111_CO_4.traj,-17.048173904418945,Cu3Co1_111_CO
-Cu3Cu1_111_CO_1.traj,-15.47188949584961,Cu3Cu1_111_CO
-Cu3Ga1_111_CO_15.traj,-15.139805793762207,Cu3Ga1_111_CO
-Cu3Ge1_111_CO_2.traj,-15.089091300964355,Cu3Ge1_111_CO
-Cu3In1_111_CO_15.traj,-15.029780387878418,Cu3In1_111_CO
-Cu3Ni1_111_CO_18.traj,-16.398197174072266,Cu3Ni1_111_CO
-Cu3Pd1_111_CO_15.traj,-15.852254867553711,Cu3Pd1_111_CO
-Cu3Pt1_111_CO_1.traj,-16.313467025756836,Cu3Pt1_111_CO
-Cu3Rh1_111_CO_5.traj,-16.767507553100586,Cu3Rh1_111_CO
-Cu3Sb1_111_CO_4.traj,-14.992384910583496,Cu3Sb1_111_CO
-Cu3Sn1_111_CO_17.traj,-14.932073593139648,Cu3Sn1_111_CO
-Cu3Zn1_111_CO_2.traj,-15.519940376281738,Cu3Zn1_111_CO
-```
-</details>
-
-The Cu3M1-CO_lower directory contains the optimized CIF files for each of the lowest energy structures.
