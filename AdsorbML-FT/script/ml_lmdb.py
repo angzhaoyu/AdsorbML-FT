@@ -90,7 +90,7 @@ def get_ads_db(db_DFT_path, db_slab_path, E_ads_db_path, E_mol):
 
             energy_mol = None
             for mol_name_, mol_energy_ in E_mol.items():
-                if  mol_name_  in DFT_names :
+                if  "_" + mol_name_  in DFT_names :
                     energy_mol = mol_energy_
             if energy_mol is None:
                 raise Exception("Please provide E_mol information")
