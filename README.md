@@ -1,7 +1,5 @@
 # AdsorbML-FT
-
-AdsorbML-FT is an advanced machine learning framework designed for accurate adsorption energy prediction and efficient structure optimization on catalyst surfaces. The integrated MK (Microkinetic) component delivers steady-state approximation solutions for reaction network analysis.
-
+AdsorbML-FT is a process developed based on the fine-tuning scheme of AdsorbML for accurate adsorption energy prediction and effective structural optimization of catalyst surfaces.The integrated MK (Microkinetic) component delivers steady-state approximation solutions for reaction network analysis.
 ## Overview
 
 This comprehensive toolkit offers:
