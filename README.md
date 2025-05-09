@@ -522,7 +522,7 @@ coverage, rate = cal_coverge(df_1, dict_bound, mol)
 
 ## License
 
-
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 
@@ -530,4 +530,3 @@ coverage, rate = cal_coverge(df_1, dict_bound, mol)
 - [Open Catalyst Project](https://opencatalystproject.org/) for datasets and models
 - Contributors to the AdsorbML-FT project for their valuable input and feedback
 
-- 
