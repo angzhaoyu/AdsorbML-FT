@@ -1,4 +1,4 @@
-# AdsorbML-FT
+![image](https://github.com/user-attachments/assets/63f07e19-410d-4bec-9fce-55b2a301c256)# AdsorbML-FT
 AdsorbML-FT is a process developed based on the fine-tuning scheme of AdsorbML for accurate adsorption energy prediction and effective structural optimization of catalyst surfaces.The integrated MK (Microkinetic) component delivers steady-state approximation solutions for reaction network analysis.
 ## Overview
 
@@ -383,13 +383,13 @@ python ../script/opt_cif.py
 
 ```
       Step     Time          Energy          fmax
-BFGS:    0 19:25:54      -14.332844        2.105474
-BFGS:    1 19:25:54      -14.426354        2.584027
-BFGS:    2 19:25:54      -14.414130        1.060086
-...
-BFGS:   37 19:25:55      -14.838418        0.016325
+BFGS:    0 19:25:54       -0.046185        2.206761
+BFGS:    1 19:25:54       -0.075067        2.803944
+BFGS:    2 19:25:54       -0.115827        1.059300
+...    
+BFGS:   37 19:25:55       -0.669343        0.009228
       Step     Time          Energy          fmax
-BFGS:    0 19:25:55      -14.877031        1.011775
+BFGS:    0 19:25:55       -0.774622        1.011775
 ...
 ```
 </details>
@@ -409,23 +409,23 @@ This will create a new directory with "_lower" suffix containing the lowest ener
 
 ```
 File,Energy (eV),Base Name
-Cu3Ag1_111_CO_19.traj,-15.13988208770752,Cu3Ag1_111_CO
-Cu3Al1_111_CO_21.traj,-15.234298706054688,Cu3Al1_111_CO
-Cu3As1_111_CO_14.traj,-15.258240699768066,Cu3As1_111_CO
-Cu3Au1_111_CO_7.traj,-15.058496475219727,Cu3Au1_111_CO
-Cu3Cd1_111_CO_7.traj,-15.478275299072266,Cu3Cd1_111_CO
-Cu3Co1_111_CO_4.traj,-17.048173904418945,Cu3Co1_111_CO
-Cu3Cu1_111_CO_1.traj,-15.47188949584961,Cu3Cu1_111_CO
-Cu3Ga1_111_CO_15.traj,-15.139805793762207,Cu3Ga1_111_CO
-Cu3Ge1_111_CO_2.traj,-15.089091300964355,Cu3Ge1_111_CO
-Cu3In1_111_CO_15.traj,-15.029780387878418,Cu3In1_111_CO
-Cu3Ni1_111_CO_18.traj,-16.398197174072266,Cu3Ni1_111_CO
-Cu3Pd1_111_CO_15.traj,-15.852254867553711,Cu3Pd1_111_CO
-Cu3Pt1_111_CO_1.traj,-16.313467025756836,Cu3Pt1_111_CO
-Cu3Rh1_111_CO_5.traj,-16.767507553100586,Cu3Rh1_111_CO
-Cu3Sb1_111_CO_4.traj,-14.992384910583496,Cu3Sb1_111_CO
-Cu3Sn1_111_CO_17.traj,-14.932073593139648,Cu3Sn1_111_CO
-Cu3Zn1_111_CO_2.traj,-15.519940376281738,Cu3Zn1_111_CO
+Cu3Ag1_111_CO_19.traj,-0.7326459288597107,Cu3Ag1_111_CO
+Cu3Al1_111_CO_20.traj,-0.6951969861984253,Cu3Al1_111_CO
+Cu3As1_111_CO_6.traj,-0.7857128977775574,Cu3As1_111_CO
+Cu3Au1_111_CO_7.traj,-0.605774998664856,Cu3Au1_111_CO
+Cu3Cd1_111_CO_9.traj,-0.9426915645599365,Cu3Cd1_111_CO
+Cu3Co1_111_CO_21.traj,-2.2576684951782227,Cu3Co1_111_CO
+Cu3Cu1_111_CO_4.traj,-0.7947379350662231,Cu3Cu1_111_CO
+Cu3Ga1_111_CO_11.traj,-0.7107882499694824,Cu3Ga1_111_CO
+Cu3Ge1_111_CO_6.traj,-0.6272360682487488,Cu3Ge1_111_CO
+Cu3In1_111_CO_2.traj,-0.6652964353561401,Cu3In1_111_CO
+Cu3Ni1_111_CO_1.traj,-1.806041955947876,Cu3Ni1_111_CO
+Cu3Pd1_111_CO_18.traj,-1.2043360471725464,Cu3Pd1_111_CO
+Cu3Pt1_111_CO_13.traj,-1.647141933441162,Cu3Pt1_111_CO
+Cu3Rh1_111_CO_3.traj,-2.0691423416137695,Cu3Rh1_111_CO
+Cu3Sb1_111_CO_14.traj,-0.49816271662712097,Cu3Sb1_111_CO
+Cu3Sn1_111_CO_17.traj,-0.563944935798645,Cu3Sn1_111_CO
+Cu3Zn1_111_CO_3.traj,-0.9388298392295837,Cu3Zn1_111_CO
 ```
 </details>
 
