@@ -268,8 +268,9 @@ Place your trajectory files in the following directories:
 
 The adsorption energy calculation differs from FairChem's approach. We directly use:
 ```
-Eads = E(ads) - E(slab) - E(mol)
+Eads = E(ads) - E(slab) - E(mol) 
 ```
+E(mol) can be set in /AdsorbML-FT/AdsorbML-FT/01-data/01-data_traj/E_mol
 
 #### 9 Database Creation and Model Training
 
